@@ -1,17 +1,31 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { assets, BagIcon, BoxIcon, CartIcon, HomeIcon } from "../assets/assets";
 import Link from "next/link";
 import { useAppContext } from "../context/AppContext";
 import Image from "next/image";
-import { useClerk, UserButton } from "@clerk/nextjs";
+import { useClerk, UserButton, useUser } from "@clerk/nextjs";
 import { db } from "../config/firebaseConfig";
 
 const Navbar = () => {
-  const { isSeller, router, user } = useAppContext();
+  const { isSeller, router } = useAppContext();
+  const { isSignedIn, user } = useUser();
   const { openSignIn } = useClerk();
 
-  console.log(db);
+  // Call API when user logs in
+  useEffect(() => {
+    if (isSignedIn && user) {
+      fetch("/api/user/create", {
+        method: "POST", // Change to POST if creating a user
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => console.log("User API Response:", data))
+        .catch((error) => console.error("Error calling API:", error));
+    }
+  }, [isSignedIn, user]);
 
   return (
     <nav className="flex items-center justify-between px-6 md:px-16 lg:px-32 py-3 border-b border-gray-300 text-gray-700">
