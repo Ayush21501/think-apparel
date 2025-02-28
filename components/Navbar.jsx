@@ -1,16 +1,17 @@
 "use client";
-import React, { useEffect } from "react";
-import { assets, BagIcon, BoxIcon, CartIcon, HomeIcon } from "../assets/assets";
-import Link from "next/link";
-import { useAppContext } from "../context/AppContext";
-import Image from "next/image";
 import { useClerk, UserButton, useUser } from "@clerk/nextjs";
-import { db } from "../config/firebaseConfig";
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { assets, BagIcon, BoxIcon, CartIcon, HomeIcon } from "../assets/assets";
+import { useAppContext } from "../context/AppContext";
 
 const Navbar = () => {
   const { isSeller, router } = useAppContext();
   const { isSignedIn, user } = useUser();
   const { openSignIn } = useClerk();
+  const [isContactOpen, setIsContactOpen] = useState(false);
+
 
   // Call API when user logs in
   useEffect(() => {
@@ -42,10 +43,10 @@ const Navbar = () => {
         <Link href="/all-products" className="hover:text-gray-900 transition">
           Shop
         </Link>
-        <Link href="/" className="hover:text-gray-900 transition">
+        {/* <Link href="/" className="hover:text-gray-900 transition">
           About Us
-        </Link>
-        <Link href="/" className="hover:text-gray-900 transition">
+        </Link> */}
+        <Link href="#" onClick={() => setIsContactOpen(true)} className="hover:text-gray-900 transition">
           Contact
         </Link>
 
@@ -143,6 +144,21 @@ const Navbar = () => {
           </button>
         )}
       </div>
+
+      {isContactOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 shadow-lg max-w-sm w-full text-center">
+            <h2 className="text-xl font-semibold mb-2">Contact Us</h2>
+            <p className="mb-4 text-gray-600">We are here to help! Reach out to us for any queries through the details below:</p>
+            <p className="mb-2"><strong>Phone:</strong> +1 (123) 456-7890</p>
+            <p className="mb-4"><strong>Email:</strong> support@example.com</p>
+            <button onClick={() => setIsContactOpen(false)} className="mt-4 px-6 py-2 bg-orange-600 text-white rounded hover:bg-orange-600 transition rounded-full cursor-pointer">
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+
     </nav>
   );
 };
