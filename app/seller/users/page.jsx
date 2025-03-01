@@ -10,7 +10,6 @@ import { fetchUsers } from "../../../services/user";
 const UsersList = () => {
   const { router } = useAppContext();
 
-  const [products, setProducts] = useState([]);
   const [users, setUsers] = useState([]);
 
   const [loading, setLoading] = useState(true);
@@ -42,42 +41,42 @@ const UsersList = () => {
               <thead className="text-gray-900 text-sm text-left">
                 <tr>
                   <th className="w-2/3 md:w-2/5 px-4 py-3 font-medium truncate">
-                    Product
+                    Email
                   </th>
                   <th className="px-4 py-3 font-medium truncate max-sm:hidden">
-                    Category
+                    First name
                   </th>
                   <th className="px-4 py-3 font-medium truncate">Price</th>
                   <th className="px-4 py-3 font-medium truncate max-sm:hidden">
-                    Action
+                    Last name
                   </th>
                 </tr>
               </thead>
               <tbody className="text-sm text-gray-500">
-                {products.map((product, index) => (
+                {users.map((user, index) => (
                   <tr key={index} className="border-t border-gray-500/20">
                     <td className="md:px-4 pl-2 md:pl-4 py-3 flex items-center space-x-3 truncate">
-                      <div className="bg-gray-500/10 rounded p-2">
+                      <div className="bg-gray-500/10 rounded p-2 rounded-full ">
                         <Image
-                          src={product.image[0]}
+                          src={user.profileUrl}
                           alt="product Image"
-                          className="w-16"
-                          width={1280}
-                          height={720}
+                          className="w-16 rounded-full "
+                          width={700}
+                          height={700}
                         />
                       </div>
-                      <span className="truncate w-full">{product.name}</span>
+                      <span className="truncate w-full">{user.email}</span>
                     </td>
                     <td className="px-4 py-3 max-sm:hidden">
-                      {product.category}
+                      {user.firstName}
                     </td>
-                    <td className="px-4 py-3">${product.offerPrice}</td>
+                    <td className="px-4 py-3">{user.lastName}</td>
                     <td className="px-4 py-3 max-sm:hidden">
                       <button
-                        onClick={() => router.push(`/product/${product._id}`)}
+                        onClick={() => router.push(`/product/${user.userId}`)}
                         className="flex items-center gap-1 px-1.5 md:px-3.5 py-2 bg-orange-600 text-white rounded-md"
                       >
-                        <span className="hidden md:block">Visit</span>
+                        <span className="hidden md:block">Report</span>
                         <Image
                           className="h-3.5"
                           src={assets.redirect_icon}
