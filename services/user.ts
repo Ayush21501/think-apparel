@@ -15,8 +15,8 @@ export const createUser = async () => {
   return data;
 };
 
-export const fetchUsers = async() => {
-  const response = await fetch('/api/user');
+export const fetchUsers = async(page: number = 1) => {
+  const response = await fetch(`/api/user?page=${page}`);
   const data = await response.json();
   return data;
 }

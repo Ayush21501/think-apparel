@@ -9,17 +9,20 @@ import { fetchUsers } from "../../../services/user";
 
 const UsersList = () => {
   const { router } = useAppContext();
-
   const [users, setUsers] = useState([]);
-
   const [loading, setLoading] = useState(true);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages]  = useState();
 
   useEffect(() => {
     const getUsers = async () => {
       try{
-        const data = await fetchUsers();
+        const data = await fetchUsers(currentPage);
         setLoading(false);
-        setUsers(data);
+        setUsers(data.data.users);
+        setTotalPages(data.data.totalPages);
+        console.log(totalPages, data.data.totalPages)
       }
       catch(error){
         console.error("somthing went wrong!",error);
@@ -27,7 +30,16 @@ const UsersList = () => {
       }
     }
     getUsers();
-  }, []);
+  }, [currentPage] );
+
+
+  const onNextPageClick = () => {
+    setCurrentPage( (prev) => prev + 1 > totalPages ? totalPages : prev + 1);
+  }
+
+  const onPreviousPageClick = () => {
+    setCurrentPage((prev) =>  prev - 1 <  1 ? 1 : prev - 1);
+  }
 
   return (
     <div className="flex-1 min-h-screen flex flex-col justify-between">
@@ -89,6 +101,37 @@ const UsersList = () => {
               </tbody>
             </table>
           </div>
+           {/* Pagination Controls */}
+           <div className="flex justify-center items-center space-x-2 py-4">
+              <button
+                className="px-4 py-2 bg-gray-600 text-white rounded disabled:opacity-50"
+                onClick={onPreviousPageClick}
+                disabled={currentPage === 1}
+              >
+                Prev
+              </button>
+              
+              {[...Array(totalPages)].map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentPage(index + 1)}
+                  className={`px-4 py-2 rounded ${
+                    currentPage === index + 1 ? "bg-blue-500 text-white" : "bg-gray-200"
+                  }`}
+                >
+                  {index + 1}
+                </button>
+              ))}
+
+              <button
+                className="px-4 py-2 bg-gray-600 text-white rounded disabled:opacity-50"
+                onClick={onNextPageClick}
+                disabled={currentPage >= totalPages}
+              > 
+                Next
+              </button>
+            </div>
+          
         </div>
       )}
       <Footer />
