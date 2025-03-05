@@ -23,10 +23,11 @@ export async function POST() {
     profileUrl: user.imageUrl,
     role: "ADMIN",
   });
-  console.log(data);
+  
 
   return Response.json(
     { message: "User created in Firestore" },
-    { status: 200 }
+    { status: 200 },
+
   );
 }

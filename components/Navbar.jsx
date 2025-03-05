@@ -23,9 +23,11 @@ const Navbar = () => {
         },
       })
         .then((res) => res.json())
-        .then((data) => console.log("User API Response:", data))
+        .then((data) => {console.log("User API Response:", data)})
         .catch((error) => console.error("Error calling API:", error));
     }
+   
+
   }, [isSignedIn, user]);
 
   return (
